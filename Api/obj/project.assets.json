@@ -4422,11 +4422,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Api/Api.csproj",
+      "projectUniqueName": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Api/Api.csproj",
       "projectName": "Api",
-      "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Api/Api.csproj",
+      "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Api/Api.csproj",
       "packagesPath": "/Users/gabrielabreu/.nuget/packages/",
-      "outputPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Api/obj/",
+      "outputPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Api/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/gabrielabreu/.nuget/NuGet/NuGet.Config"
@@ -4441,11 +4441,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Application/Application.csproj": {
-              "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Application/Application.csproj"
+            "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Application/Application.csproj": {
+              "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Application/Application.csproj"
             },
-            "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Infrastructure/Infrastructure.csproj": {
-              "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Infrastructure/Infrastructure.csproj"
+            "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Infrastructure/Infrastructure.csproj": {
+              "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Infrastructure/Infrastructure.csproj"
             }
           }
         }

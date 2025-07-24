@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "fmESvNqvRNQ=",
+  "dgSpecHash": "B/NCZcRz7Gs=",
   "success": true,
-  "projectFilePath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Domain/Domain.csproj",
+  "projectFilePath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Domain/Domain.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

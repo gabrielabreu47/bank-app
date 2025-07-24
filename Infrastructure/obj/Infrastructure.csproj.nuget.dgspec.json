@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Infrastructure/Infrastructure.csproj": {}
+    "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Infrastructure/Infrastructure.csproj": {}
   },
   "projects": {
-    "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Application/Application.csproj": {
+    "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Application/Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Application/Application.csproj",
+        "projectUniqueName": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Application/Application.csproj",
         "projectName": "Application",
-        "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Application/Application.csproj",
+        "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Application/Application.csproj",
         "packagesPath": "/Users/gabrielabreu/.nuget/packages/",
-        "outputPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Application/obj/",
+        "outputPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Application/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/gabrielabreu/.nuget/NuGet/NuGet.Config"
@@ -26,8 +26,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Domain/Domain.csproj": {
-                "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Domain/Domain.csproj"
+              "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Domain/Domain.csproj": {
+                "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Domain/Domain.csproj"
               }
             }
           }
@@ -85,14 +85,14 @@
         }
       }
     },
-    "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Domain/Domain.csproj": {
+    "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Domain/Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Domain/Domain.csproj",
+        "projectUniqueName": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Domain/Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Domain/Domain.csproj",
+        "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Domain/Domain.csproj",
         "packagesPath": "/Users/gabrielabreu/.nuget/packages/",
-        "outputPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Domain/obj/",
+        "outputPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/gabrielabreu/.nuget/NuGet/NuGet.Config"
@@ -144,14 +144,14 @@
         }
       }
     },
-    "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Infrastructure/Infrastructure.csproj": {
+    "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Infrastructure/Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Infrastructure/Infrastructure.csproj",
+        "projectUniqueName": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Infrastructure/Infrastructure.csproj",
         "projectName": "Infrastructure",
-        "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Infrastructure/Infrastructure.csproj",
+        "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Infrastructure/Infrastructure.csproj",
         "packagesPath": "/Users/gabrielabreu/.nuget/packages/",
-        "outputPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Infrastructure/obj/",
+        "outputPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Infrastructure/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/gabrielabreu/.nuget/NuGet/NuGet.Config"
@@ -166,8 +166,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Application/Application.csproj": {
-                "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Application/Application.csproj"
+              "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Application/Application.csproj": {
+                "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Application/Application.csproj"
               }
             }
           }

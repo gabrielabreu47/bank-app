@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Domain/Domain.csproj": {}
+    "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Domain/Domain.csproj": {}
   },
   "projects": {
-    "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Domain/Domain.csproj": {
+    "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Domain/Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Domain/Domain.csproj",
+        "projectUniqueName": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Domain/Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Domain/Domain.csproj",
+        "projectPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Domain/Domain.csproj",
         "packagesPath": "/Users/gabrielabreu/.nuget/packages/",
-        "outputPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Domain/obj/",
+        "outputPath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/gabrielabreu/.nuget/NuGet/NuGet.Config"

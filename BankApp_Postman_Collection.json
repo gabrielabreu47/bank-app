@@ -1,0 +1,337 @@
+{
+  "info": {
+    "name": "BankApp API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Accounts by Client ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/Account/client/:id?PageNumber=1&PageSize=10&Filters=",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Account",
+            "client",
+            ":id"
+          ],
+          "query": [
+            {
+              "key": "PageNumber",
+              "value": "1"
+            },
+            {
+              "key": "PageSize",
+              "value": "10"
+            },
+            {
+              "key": "Filters",
+              "value": ""
+            }
+          ],
+          "variable": [
+            {
+              "key": "id",
+              "value": "CLIENT_ID"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Account Report",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/Account/report?From=&To=&AccountId=",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Account",
+            "report"
+          ],
+          "query": [
+            {
+              "key": "From",
+              "value": ""
+            },
+            {
+              "key": "To",
+              "value": ""
+            },
+            {
+              "key": "AccountId",
+              "value": ""
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create Account",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"accountNumber\": \"123456789\",\n  \"type\": 0,\n  \"balance\": 1000.0,\n  \"status\": true,\n  \"clientId\": \"CLIENT_ID\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Account",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Account"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Update Account",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"accountNumber\": \"987654321\",\n  \"type\": 1,\n  \"balance\": 500.0,\n  \"status\": false,\n  \"clientId\": \"CLIENT_ID\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Account/:id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Account",
+            ":id"
+          ],
+          "variable": [
+            {
+              "key": "id",
+              "value": "ACCOUNT_ID"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Delete Account",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/api/Account/:id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Account",
+            ":id"
+          ],
+          "variable": [
+            {
+              "key": "id",
+              "value": "ACCOUNT_ID"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "List Clients",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/Client?PageNumber=1&PageSize=10&Filters=",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Client"
+          ],
+          "query": [
+            {
+              "key": "PageNumber",
+              "value": "1"
+            },
+            {
+              "key": "PageSize",
+              "value": "10"
+            },
+            {
+              "key": "Filters",
+              "value": ""
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create Client",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"John\",\n  \"lastName\": \"Doe\",\n  \"birthDate\": \"1990-01-01T00:00:00Z\",\n  \"gender\": 0,\n  \"identification\": \"00112233445\",\n  \"address\": \"Street 123\",\n  \"phone\": \"8090000000\",\n  \"status\": true,\n  \"password\": \"pass123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Client",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Client"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Update Client",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Jane\",\n  \"lastName\": \"Smith\",\n  \"birthDate\": \"1992-01-01T00:00:00Z\",\n  \"gender\": 1,\n  \"identification\": \"0099887766\",\n  \"address\": \"Avenue 456\",\n  \"phone\": \"8091234567\",\n  \"status\": false,\n  \"password\": \"newpass123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Client/:id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Client",
+            ":id"
+          ],
+          "variable": [
+            {
+              "key": "id",
+              "value": "CLIENT_ID"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Delete Client",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/api/Client/:id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Client",
+            ":id"
+          ],
+          "variable": [
+            {
+              "key": "id",
+              "value": "CLIENT_ID"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Movements by Account ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/Movement/account/:id?PageNumber=1&PageSize=10&Filters=",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Movement",
+            "account",
+            ":id"
+          ],
+          "query": [
+            {
+              "key": "PageNumber",
+              "value": "1"
+            },
+            {
+              "key": "PageSize",
+              "value": "10"
+            },
+            {
+              "key": "Filters",
+              "value": ""
+            }
+          ],
+          "variable": [
+            {
+              "key": "id",
+              "value": "ACCOUNT_ID"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create Movement",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": 0,\n  \"value\": 150.75,\n  \"accountId\": \"ACCOUNT_ID\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Movement",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Movement"
+          ]
+        }
+      }
+    }
+  ]
+}

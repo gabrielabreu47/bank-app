@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "PyXbGkRWb/4=",
+  "dgSpecHash": "RO83VwpUOAg=",
   "success": true,
-  "projectFilePath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory/Api/Api.csproj",
+  "projectFilePath": "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/BankApp/Api/Api.csproj",
   "expectedPackageFiles": [
     "/Users/gabrielabreu/.nuget/packages/automapper/11.0.1/automapper.11.0.1.nupkg.sha512",
     "/Users/gabrielabreu/.nuget/packages/automapper.extensions.microsoft.dependencyinjection/11.0.0/automapper.extensions.microsoft.dependencyinjection.11.0.0.nupkg.sha512",
