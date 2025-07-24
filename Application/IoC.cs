@@ -1,5 +1,7 @@
+using System.Reflection;
 using Application.Handlers;
 using Application.Interfaces;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application;
@@ -12,5 +14,6 @@ public static class IoC
         services.AddScoped<IAccountHandler, AccountHandler>();
         services.AddScoped<IClientHandler, ClientHandler>();
         services.AddScoped<IMovementHandler, MovementHandler>();
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }
