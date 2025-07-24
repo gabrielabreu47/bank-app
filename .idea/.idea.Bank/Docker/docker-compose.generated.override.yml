@@ -1,0 +1,26 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  web:
+    build:
+      context: "/Users/gabrielabreu/Downloads/ClientDirectoryApp-main/ClientDirectory"
+      dockerfile: "Dockerfile"
+      args:
+        BUILD_CONFIGURATION: "Debug"
+    entrypoint:
+    - "/opt/rider-debugger/linux-arm64/JetBrains.Debugger.Worker"
+    - "--runtimeconfig"
+    - "/opt/rider-debugger/JetBrains.Debugger.Worker.runtimeconfig.json"
+    - "--mode=server"
+    - "--frontend-port=57100"
+    - "--backend-port=57300"
+    - "--timeout=60"
+    environment:
+      RIDER_DEBUGGER_LOG_DIR: "/var/opt/rider-debugger"
+      RESHARPER_LOG_CONF: "/etc/opt/rider-debugger/backend-log.xml"
+    ports:
+    - "127.0.0.1:57011:57100"
+    - "127.0.0.1:57211:57300"
+    volumes:
+    - "/Users/gabrielabreu/.local/share/JetBrains/RiderRemoteDebugger/2024.1.5/LinuxArm64:/opt/rider-debugger"
+    - "/Applications/Rider.app/Contents/bin:/etc/opt/rider-debugger/backend-log.xml"
+    - "/Users/gabrielabreu/Library/Logs/JetBrains/Rider2024.1/DebuggerWorker/JetBrains.Debugger.Worker.2025_7_24_00_52_12:/var/opt/rider-debugger:rw"
