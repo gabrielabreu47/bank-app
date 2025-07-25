@@ -10,27 +10,45 @@ public static class QueryableExtensions
 
         var parameter = Expression.Parameter(typeof(T), "t");
         var expressions = new List<Expression>();
-        foreach (var filter in filters.Split("&"))
+        foreach (var filterGroup in filters.Split("&"))
         {
-            var parts = filter.Split("="); if (parts.Length != 2) continue;
-            var property = Expression.Property(parameter, parts[0]);
-            var value = Expression.Constant(parts[1].ToLower());
-            MethodCallExpression propertyToString = null!;
-            if (property.Type == typeof(DateTime) || property.Type == typeof(DateTimeOffset))
+            var orExpressions = new List<Expression>();
+            foreach (var filter in filterGroup.Split("|"))
             {
-                var argument = Expression.Constant("yyyy-MM-dd");
-                var toString = property.Type.GetMethod("ToString", new Type[] { typeof(string) });
-                propertyToString = Expression.Call(property, toString!, argument);
+                var parts = filter.Split("="); 
+                if (parts.Length != 2) continue;
+
+                var propertyName = typeof(T).GetProperties()
+                    .FirstOrDefault(p => p.Name.Equals(parts[0], StringComparison.OrdinalIgnoreCase))?.Name;
+
+                if (propertyName == null) continue;
+
+                var property = Expression.Property(parameter, propertyName);
+                var value = Expression.Constant(parts[1].ToLower());
+                MethodCallExpression propertyToString;
+
+                if (property.Type == typeof(DateTime) || property.Type == typeof(DateTimeOffset))
+                {
+                    var argument = Expression.Constant("yyyy-MM-dd");
+                    var toString = property.Type.GetMethod("ToString", new Type[] { typeof(string) });
+                    propertyToString = Expression.Call(property, toString!, argument);
+                }
+                else 
+                { 
+                    propertyToString = Expression.Call(property, "ToString", null);
+                }
+
+                var propertyLower = Expression.Call(propertyToString, "ToLower", null);
+                var contains = Expression.Call(propertyLower, typeof(string).GetMethod("Contains", new[] { typeof(string) })!, value);
+                orExpressions.Add(contains);
             }
-            else 
-            { 
-                propertyToString = Expression.Call(property, "ToString", null);
+
+            if (orExpressions.Count > 0)
+            {
+                expressions.Add(orExpressions.Aggregate(Expression.OrElse));
             }
-            var propertyLower = Expression.Call(propertyToString, "ToLower", null);
-            var call = Expression.Call(propertyLower, typeof(string).GetMethod("Contains", new[] { typeof(string) })!, value);
-            expressions.Add(call);
         }
-        var body = expressions.Count > 0 ? expressions.Aggregate(Expression.And) : Expression.Constant(true);
+        var body = expressions.Count > 0 ? expressions.Aggregate(Expression.AndAlso) : Expression.Constant(true);
         var lambda = Expression.Lambda<Func<T, bool>>(body, parameter);
         var res = query.Where(lambda);
         return res;
