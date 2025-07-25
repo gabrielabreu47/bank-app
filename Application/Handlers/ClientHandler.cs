@@ -36,4 +36,11 @@ public class ClientHandler(IRepository repository, IMapper mapper)
 
         return Paged<ClientDto>.Create(result, count, filter.PageNumber, filter.PageSize);
     }
+
+    public async Task<ClientDto> Get(string id)
+    {
+        var result = await _repository.FirstOrDefault<Client>(c => c.Id == id);
+        if (result is null) throw new Exception("Client doesn't exists");
+        return _mapper.Map<ClientDto>(result);
+    }
 }

@@ -10,6 +10,23 @@ namespace Api.Controllers;
 [Route("api/[controller]")]
 public class AccountController(IAccountHandler handler) : ControllerBase
 {
+    [HttpGet("id")]
+    public async Task<IActionResult> GetById(string id)
+    {
+        try
+        {
+            var result = await handler.Get(id);
+            var response = Response<AccountDto>.CreateSuccessful(result);
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            var response = Response<string>.CreateFailed(e.Message);
+            return BadRequest(response);
+        }
+    }
+    
     [HttpGet("client/{id}")]
     public async Task<IActionResult> GetAll(string id, [FromQuery] Filter filter)
     {

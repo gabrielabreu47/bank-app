@@ -16,6 +16,13 @@ public class AccountHandler(IRepository repository, IMapper mapper)
     private readonly IRepository _repository = repository;
     private readonly IMapper _mapper = mapper;
 
+    public async Task<AccountDto> Get(string id)
+    {
+        var result = await _repository.FirstOrDefault<Account>(c => c.Id == id);
+        if (result is null) throw new Exception("Client doesn't exists");
+        return _mapper.Map<AccountDto>(result);
+    }
+
     public async Task<Paged<AccountDto>> GetAccounts(string clientId, Filter filter)
     {
         var query = _repository.AsQueryable<Account>()

@@ -7,6 +7,8 @@ namespace Application.Interfaces;
 
 public interface IAccountHandler : IBaseHandler<Account, AccountDto>
 {
+
+    Task<AccountDto> Get(string id);
     Task<Paged<AccountDto>> GetAccounts(string clientId, Filter filter);
     Task<ReportDto> GetAccountReport(ReportFilter filter);
 }
