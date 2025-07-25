@@ -47,6 +47,10 @@ public static class QueryableExtensions
             {
                 expressions.Add(orExpressions.Aggregate(Expression.OrElse));
             }
+            else
+            {
+                expressions.Add(Expression.Constant(false));
+            }
         }
         var body = expressions.Count > 0 ? expressions.Aggregate(Expression.AndAlso) : Expression.Constant(true);
         var lambda = Expression.Lambda<Func<T, bool>>(body, parameter);
