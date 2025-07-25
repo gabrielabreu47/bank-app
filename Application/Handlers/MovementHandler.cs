@@ -36,6 +36,8 @@ public class MovementHandler(IRepository repository, IMapper mapper)
 
         var result = _mapper.Map<List<MovementDto>>(response);
 
+        result = result.OrderBy(m => m.Date).ToList();
+
         return Paged<MovementDto>.Create(result, count, filter.PageNumber, filter.PageSize);
     }
 
@@ -73,7 +75,7 @@ public class MovementHandler(IRepository repository, IMapper mapper)
         entity.Date = DateTime.UtcNow;
         entity.PreviousBalance = account.Balance;
 
-        account.Balance += movement.Value;
+        account.Balance += movement.Type == MovementTypes.Debit ? -movement.Value : movement.Value;
 
         await _repository.UpdateAsync(account);
         await _repository.AddAsync(entity);

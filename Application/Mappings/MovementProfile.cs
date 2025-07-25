@@ -12,6 +12,7 @@ public class MovementProfile : Profile
     {
         CreateMap<Movement, MovementDto>()
             .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToEnum<MovementTypes>()))
+            .ForMember(dest => dest.Balance, opt => opt.MapFrom(src => src.PreviousBalance))
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         
         CreateMap<CreateMovementDto, Movement>()

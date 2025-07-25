@@ -55,8 +55,9 @@ public class AccountHandler(IRepository repository, IMapper mapper)
         var client = await _repository.FirstOrDefault<Client>(c => c.Id == account.ClientId);
 
         if (client is null) throw new Exception("Cliente no existe");
-        
 
+        filter.To = filter.To.Date.AddDays(1);
+        
         var movements = await _repository
             .ExecuteQuery<Movement>(m => 
                 m.AccountId == filter.AccountId
@@ -71,7 +72,9 @@ public class AccountHandler(IRepository repository, IMapper mapper)
                 Value = m.Value,
                 InitialBalance = m.PreviousBalance,
                 CurrentBalance = GetBalance(m)
-            }).ToList();
+            })
+            .OrderBy(m => m.Date)
+            .ToList();
 
         var result = new ReportDto
         {
