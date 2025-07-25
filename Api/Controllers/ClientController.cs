@@ -27,7 +27,7 @@ public class ClientController(IClientHandler handler) : ControllerBase
         }
     }
     
-    [HttpGet("id")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetById(string id)
     {
         try

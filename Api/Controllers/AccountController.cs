@@ -10,7 +10,7 @@ namespace Api.Controllers;
 [Route("api/[controller]")]
 public class AccountController(IAccountHandler handler) : ControllerBase
 {
-    [HttpGet("id")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetById(string id)
     {
         try
