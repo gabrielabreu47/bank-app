@@ -60,4 +60,50 @@ public class Repository(IClientDirectoryDbContext context) : IRepository
             await context.SaveChangesAsync();
         }
     }
+
+    /// <summary>
+    /// Projects entities to DTOs using implicit operators.
+    /// </summary>
+    /// <typeparam name="TEntity">Entity type.</typeparam>
+    /// <typeparam name="TResult">DTO type with implicit operator from TEntity.</typeparam>
+    /// <param name="query">Entity query.</param>
+    /// <returns>List of projected DTOs.</returns>
+    public async Task<List<TResult>> ProjectToAsync<TEntity, TResult>(IQueryable<TEntity> query)
+        where TEntity : BaseEntity
+    {
+        // Uses implicit operator for projection
+        return await query.Select(e => (TResult)(object)e).ToListAsync();
+    }
+
+    /// <summary>
+    /// Projects entities to DTOs with explicit includes and implicit operator mapping.
+    /// </summary>
+    /// <typeparam name="TEntity">Entity type.</typeparam>
+    /// <typeparam name="TResult">DTO type with implicit operator from TEntity.</typeparam>
+    /// <param name="includes">List of navigation properties to include.</param>
+    /// <param name="filter">Optional filter expression.</param>
+    /// <returns>List of projected DTOs.</returns>
+    public async Task<List<TResult>> ProjectToWithIncludesAsync<TEntity, TResult>(
+        List<Expression<Func<TEntity, object>>> includes,
+        Expression<Func<TEntity, bool>>? filter = null)
+        where TEntity : BaseEntity
+    {
+        IQueryable<TEntity> query = context.Set<TEntity>();
+        if (filter != null)
+            query = query.Where(filter);
+        foreach (var include in includes)
+            query = query.Include(include);
+        return await query.Select(e => (TResult)(object)e).ToListAsync();
+    }
+
+    /// <summary>
+    /// Executes a projection query and returns the result list.
+    /// </summary>
+    /// <typeparam name="TResult">Projection result type.</typeparam>
+    /// <param name="query">Projection query.</param>
+    /// <returns>List of results.</returns>
+    public async Task<List<TResult>> ExecuteProjection<TResult>(IQueryable<TResult> query)
+    {
+        return await query.ToListAsync();
+    }
 }

@@ -8,8 +8,14 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class MovementController(IMovementHandler handler) : ControllerBase
+public class MovementController(IMovementHandler handler, ILogger<MovementController> logger) : ControllerBase
 {
+    /// <summary>
+    /// Gets all movements for an account.
+    /// </summary>
+    /// <response code="200">Returns paged movements</response>
+    /// <response code="404">Account not found</response>
+    /// <response code="500">Internal server error</response>
     [HttpGet("account/{id}")]
     public async Task<IActionResult> GetAll(string id, [FromQuery] Filter filter)
     {
@@ -17,30 +23,63 @@ public class MovementController(IMovementHandler handler) : ControllerBase
         {
             var result = await handler.Get(id, filter);
             var response = Response<Paged<MovementDto>>.CreateSuccessful(result);
+            logger.LogInformation("Movements retrieved for account id: {Id}", id);
             return Ok(response);
         }
-        catch (Exception e)
+        catch (AccountNotFoundException ex)
         {
-            Console.WriteLine(e);
-            var response = Response<string>.CreateFailed(e.Message);
-            return BadRequest(response);
+            logger.LogWarning(ex, "Account not found for id: {Id}", id);
+            return NotFound(Response<string>.CreateFailed("Account not found"));
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error retrieving movements for account id: {Id}", id);
+            return StatusCode(500, Response<string>.CreateFailed("Internal server error"));
         }
     }
 
+    /// <summary>
+    /// Creates a new movement for an account.
+    /// Returns 201 Created.
+    /// </summary>
+    /// <response code="201">Movement created</response>
+    /// <response code="400">Validation error</response>
+    /// <response code="404">Account not found</response>
+    /// <response code="500">Internal server error</response>
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateMovementDto dto)
     {
+        if (!ModelState.IsValid)
+        {
+            var errorMessages = string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+            return BadRequest(Response<string>.CreateFailed($"Validation error: {errorMessages}"));
+        }
         try
         {
             await handler.CreateMovement(dto);
             var response = Response<string>.CreateSuccessful();
-            return Ok(response);
+            logger.LogInformation("Movement created for account id: {AccountId}", dto.AccountId);
+            return StatusCode(201, response);
         }
-        catch (Exception e)
+        catch (AccountNotFoundException ex)
         {
-            Console.WriteLine(e);
-            var response = Response<string>.CreateFailed(e.Message);
-            return BadRequest(response);
+            logger.LogWarning(ex, "Account not found for id: {AccountId}", dto.AccountId);
+            return NotFound(Response<string>.CreateFailed("Account not found"));
+        }
+        catch (InsufficientFundsException ex)
+        {
+            logger.LogWarning(ex, "Insufficient funds for account id: {AccountId}", dto.AccountId);
+            return BadRequest(Response<string>.CreateFailed("Insufficient funds"));
+        }
+        catch (DailyLimitExceededException ex)
+        {
+            logger.LogWarning(ex, "Daily limit exceeded for account id: {AccountId}", dto.AccountId);
+            return BadRequest(Response<string>.CreateFailed("Daily limit exceeded"));
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error creating movement for account id: {AccountId}", dto.AccountId);
+            return StatusCode(500, Response<string>.CreateFailed("Internal server error"));
         }
     }
 }

@@ -8,6 +8,7 @@ using ClientDirectory.Domain.Interfaces;
 using Moq;
 using Xunit;
 using System.Linq.Expressions;
+using Microsoft.Extensions.Logging;
 
 namespace Tests.UnitTests;
 
@@ -21,7 +22,8 @@ public class AccountHandlerTests
     {
         _repositoryMock = new Mock<IRepository>();
         _mapperMock = new Mock<IMapper>();
-        _handler = new AccountHandler(_repositoryMock.Object, _mapperMock.Object);
+        Mock<ILogger<AccountHandler>> loggerMock = new();
+        _handler = new AccountHandler(_repositoryMock.Object, _mapperMock.Object, loggerMock.Object);
     }
 
     [Fact]
@@ -92,13 +94,13 @@ public class AccountHandlerTests
             new() { Date = DateTime.Today, Type = (int)MovementTypes.Credit, Value = 100, PreviousBalance = 900, AccountId = accountId }
         };
 
-        _repositoryMock.Setup(r => r.FirstOrDefault<Account>(It.IsAny<Expression<Func<Account, bool>>>()))
+        _repositoryMock.Setup(r => r.FirstOrDefault(It.IsAny<Expression<Func<Account, bool>>>()))
             .ReturnsAsync(account);
 
-        _repositoryMock.Setup(r => r.FirstOrDefault<Client>(It.IsAny<Expression<Func<Client, bool>>>()))
+        _repositoryMock.Setup(r => r.FirstOrDefault(It.IsAny<Expression<Func<Client, bool>>>()))
             .ReturnsAsync(client);
 
-        _repositoryMock.Setup(r => r.ExecuteQuery<Movement>(It.IsAny<Expression<Func<Movement, bool>>>()))
+        _repositoryMock.Setup(r => r.ExecuteQuery(It.IsAny<Expression<Func<Movement, bool>>>()))
             .ReturnsAsync(movements);
 
         // Act

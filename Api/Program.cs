@@ -1,3 +1,4 @@
+using Api;
 using Application;
 using Infrastructure;
 
@@ -35,6 +36,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseAuthorization();
 

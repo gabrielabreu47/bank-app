@@ -4,6 +4,7 @@ using AutoMapper;
 using ClientDirectory.Domain.Common;
 using ClientDirectory.Domain.Entities;
 using ClientDirectory.Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -19,7 +20,8 @@ public class ClientHandlerTests
     {
         _repositoryMock = new Mock<IRepository>();
         _mapperMock = new Mock<IMapper>();
-        _handler = new ClientHandler(_repositoryMock.Object, _mapperMock.Object);
+        Mock<ILogger<ClientHandler>> loggerMock = new();
+        _handler = new ClientHandler(_repositoryMock.Object, _mapperMock.Object, loggerMock.Object);
     }
 
     [Fact]

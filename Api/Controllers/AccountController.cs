@@ -8,8 +8,11 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AccountController(IAccountHandler handler) : ControllerBase
+public class AccountController(IAccountHandler handler, ILogger<AccountController> logger) : ControllerBase
 {
+    /// <summary>
+    /// Gets an account by its ID.
+    /// </summary>
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(string id)
     {
@@ -17,16 +20,24 @@ public class AccountController(IAccountHandler handler) : ControllerBase
         {
             var result = await handler.Get(id);
             var response = Response<AccountDto>.CreateSuccessful(result);
+            logger.LogInformation("Account retrieved for id: {Id}", id);
             return Ok(response);
         }
-        catch (Exception e)
+        catch (ClientNotFoundException ex)
         {
-            Console.WriteLine(e);
-            var response = Response<string>.CreateFailed(e.Message);
-            return BadRequest(response);
+            logger.LogWarning(ex, "Account not found for id: {Id}", id);
+            return NotFound(Response<string>.CreateFailed("Account not found"));
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error retrieving account for id: {Id}", id);
+            return StatusCode(500, Response<string>.CreateFailed("Internal server error"));
         }
     }
-    
+
+    /// <summary>
+    /// Gets all accounts for a client.
+    /// </summary>
     [HttpGet("client/{id}")]
     public async Task<IActionResult> GetAll(string id, [FromQuery] Filter filter)
     {
@@ -34,16 +45,24 @@ public class AccountController(IAccountHandler handler) : ControllerBase
         {
             var result = await handler.GetAccounts(id, filter);
             var response = Response<Paged<AccountDto>>.CreateSuccessful(result);
+            logger.LogInformation("Accounts retrieved for client id: {Id}", id);
             return Ok(response);
         }
-        catch (Exception e)
+        catch (ClientNotFoundException ex)
         {
-            Console.WriteLine(e);
-            var response = Response<Paged<AccountDto>>.CreateFailed(e.Message);
-            return BadRequest(response);
+            logger.LogWarning(ex, "Client not found for id: {Id}", id);
+            return NotFound(Response<string>.CreateFailed("Client not found"));
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error retrieving accounts for client id: {Id}", id);
+            return StatusCode(500, Response<string>.CreateFailed("Internal server error"));
         }
     }
-    
+
+    /// <summary>
+    /// Gets a report for an account.
+    /// </summary>
     [HttpGet("report")]
     public async Task<IActionResult> Report([FromQuery] ReportFilter filter)
     {
@@ -51,50 +70,87 @@ public class AccountController(IAccountHandler handler) : ControllerBase
         {
             var result = await handler.GetAccountReport(filter);
             var response = Response<ReportDto>.CreateSuccessful(result);
+            logger.LogInformation("Account report generated for account id: {AccountId}", filter.AccountId);
             return Ok(response);
         }
-        catch (Exception e)
+        catch (AccountNotFoundException ex)
         {
-            Console.WriteLine(e);
-            var response = Response<ReportDto>.CreateFailed(e.Message);
-            return BadRequest(response);
+            logger.LogWarning(ex, "Account not found for id: {AccountId}", filter.AccountId);
+            return NotFound(Response<string>.CreateFailed("Account not found"));
+        }
+        catch (ClientNotFoundException ex)
+        {
+            logger.LogWarning(ex, "Client not found for account id: {AccountId}", filter.AccountId);
+            return NotFound(Response<string>.CreateFailed("Client not found"));
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error generating report for account id: {AccountId}", filter.AccountId);
+            return StatusCode(500, Response<string>.CreateFailed("Internal server error"));
         }
     }
 
+    /// <summary>
+    /// Creates a new account.
+    /// Returns 201 Created with the location of the new account.
+    /// </summary>
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] AccountDto dto)
     {
+        if (!ModelState.IsValid)
+        {
+            var errorMessages = string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+            return BadRequest(Response<string>.CreateFailed($"Validation error: {errorMessages}"));
+        }
         try
         {
             var id = await handler.Create(dto);
             var response = Response<string>.CreateSuccessful(id);
-            return Ok(response);
+            logger.LogInformation("Account created with id: {Id}", id);
+            return CreatedAtAction(nameof(GetById), new { id }, response);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e);
-            var response = Response<string>.CreateFailed(e.Message);
-            return BadRequest(response);
+            logger.LogError(ex, "Error creating account");
+            return StatusCode(500, Response<string>.CreateFailed("Internal server error"));
         }
     }
 
+    /// <summary>
+    /// Updates an existing account.
+    /// Returns 404 if not found.
+    /// </summary>
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(string id, [FromBody] AccountDto dto)
     {
+        if (!ModelState.IsValid)
+        {
+            var errorMessages = string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+            return BadRequest(Response<string>.CreateFailed($"Validation error: {errorMessages}"));
+        }
         try
         {
             await handler.Update(id, dto);
             var response = Response<string>.CreateSuccessful();
+            logger.LogInformation("Account updated with id: {Id}", id);
             return Ok(response);
         }
-        catch (Exception e)
+        catch (ClientNotFoundException ex)
         {
-            Console.WriteLine(e);
-            var response = Response<string>.CreateFailed(e.Message);
-            return BadRequest(response);
+            logger.LogWarning(ex, "Account not found for id: {Id}", id);
+            return NotFound(Response<string>.CreateFailed("Account not found"));
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error updating account for id: {Id}", id);
+            return StatusCode(500, Response<string>.CreateFailed("Internal server error"));
         }
     }
 
+    /// <summary>
+    /// Deletes an account.
+    /// Returns 404 if not found.
+    /// </summary>
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {
@@ -102,13 +158,18 @@ public class AccountController(IAccountHandler handler) : ControllerBase
         {
             await handler.Delete(id);
             var response = Response<string>.CreateSuccessful();
+            logger.LogInformation("Account deleted with id: {Id}", id);
             return Ok(response);
         }
-        catch (Exception e)
+        catch (ClientNotFoundException ex)
         {
-            Console.WriteLine(e);
-            var response = Response<string>.CreateFailed(e.Message);
-            return BadRequest(response);
+            logger.LogWarning(ex, "Account not found for id: {Id}", id);
+            return NotFound(Response<string>.CreateFailed("Account not found"));
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error deleting account for id: {Id}", id);
+            return StatusCode(500, Response<string>.CreateFailed("Internal server error"));
         }
     }
 }

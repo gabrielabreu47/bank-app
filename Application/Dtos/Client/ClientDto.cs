@@ -13,4 +13,21 @@ public class ClientDto
     public string? Address { get; set; }
     public string? Phone { get; set; }
     public bool Status { get; set; }
+
+    public static implicit operator ClientDto(ClientDirectory.Domain.Entities.Client c)
+    {
+        if (c == null) return null;
+        return new ClientDto
+        {
+            Id = c.Id,
+            Name = c.Name,
+            LastName = c.LastName,
+            BirthDate = c.BirthDate,
+            Gender = (Genders?)c.Gender,
+            Identification = c.Identification,
+            Address = c.Address,
+            Phone = c.Phone,
+            Status = c.Status
+        };
+    }
 }

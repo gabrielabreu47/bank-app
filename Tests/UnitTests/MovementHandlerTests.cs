@@ -8,6 +8,8 @@ using ClientDirectory.Domain.Interfaces;
 using Moq;
 using Xunit;
 using System.Linq.Expressions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Tests.UnitTests;
 
@@ -21,7 +23,9 @@ public class MovementHandlerTests
     {
         _repositoryMock = new Mock<IRepository>();
         _mapperMock = new Mock<IMapper>();
-        _handler = new MovementHandler(_repositoryMock.Object, _mapperMock.Object);
+        Mock<ILogger<MovementHandler>> loggerMock = new();
+        Mock<IConfiguration> configuration = new();
+        _handler = new MovementHandler(_repositoryMock.Object, _mapperMock.Object, loggerMock.Object, configuration.Object);
     }
 
     [Fact]
@@ -71,7 +75,7 @@ public class MovementHandlerTests
 
         var movementEntity = new Movement { AccountId = dto.AccountId, Value = dto.Value };
 
-        _repositoryMock.Setup(r => r.FirstOrDefault<Account>(It.IsAny<Expression<Func<Account, bool>>>()))
+        _repositoryMock.Setup(r => r.FirstOrDefault(It.IsAny<Expression<Func<Account, bool>>>()))
             .ReturnsAsync(account);
 
         _mapperMock.Setup(m => m.Map<Movement>(dto)).Returns(movementEntity);
