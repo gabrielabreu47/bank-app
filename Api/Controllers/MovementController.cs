@@ -10,6 +10,27 @@ namespace Api.Controllers;
 [Route("api/[controller]")]
 public class MovementController(IMovementHandler handler, ILogger<MovementController> logger) : ControllerBase
 {
+    
+    /// <summary>
+    /// Gets all movements with optional filtering.
+    /// </summary>
+    [HttpGet]
+    public async Task<IActionResult> GetAll([FromQuery] Filter filter)
+    {
+        try
+        {
+            var result = await handler.Get(filter);
+            var response = Response<Paged<MovementDto>>.CreateSuccessful(result);
+            logger.LogInformation("Clients retrieved with filter");
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error retrieving clients");
+            return StatusCode(500, Response<string>.CreateFailed("Internal server error"));
+        }
+    }
+    
     /// <summary>
     /// Gets all movements for an account.
     /// </summary>

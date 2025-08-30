@@ -5,6 +5,7 @@ using Application.Extensions;
 using Application.Helpers;
 using ClientDirectory.Domain.Common;
 using ClientDirectory.Domain.Entities;
+using ClientDirectory.Domain.Enums;
 using ClientDirectory.Domain.Interfaces;
 using Microsoft.Extensions.Logging;
 
@@ -22,17 +23,41 @@ public class ClientHandler(IRepository repository, IMapper mapper, ILogger<Clien
     /// <summary>
     /// Gets paged clients with optional filters.
     /// </summary>
-    public async Task<Paged<ClientDto>> Get(Filter filter)
+    public async Task<Paged<ClientDto>> GetAll(Filter filter)
     {
         var query = _repository.AsQueryable<Client>();
+        
         if (filter.Filters is not null)
         {
             query = query.Filter(filter.Filters);
         }
+        
         var count = await _repository.CountAsync(query);
-        var (skip, take) = Paged<ClientDto>.GetPagination(filter.PageNumber, filter.PageSize);
-        var pagedQuery = query.Skip(skip).Take(take);
-        var result = await _repository.ProjectToAsync<Client, ClientDto>(pagedQuery);
+        
+        var (skip, take) = Paged<ClientDto>
+            .GetPagination(filter.PageNumber, filter.PageSize);
+        
+        var pagedQuery = query
+            .Skip(skip)
+            .Take(take);
+        
+        var accounts = await _repository
+            .ExecuteQuery(pagedQuery);
+
+        var result = accounts
+            .Select(c => new ClientDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                LastName = c.LastName,
+                BirthDate = c.BirthDate,
+                Gender = (Genders?)c.Gender,
+                Identification = c.Identification,
+                Address = c.Address,
+                Phone = c.Phone,
+                Status = c.Status
+            }).ToList();
+        
         return Paged<ClientDto>.Create(result, count, filter.PageNumber, filter.PageSize);
     }
 
@@ -43,12 +68,15 @@ public class ClientHandler(IRepository repository, IMapper mapper, ILogger<Clien
     public async Task<ClientDto> Get(string id)
     {
         var result = await _repository.FirstOrDefault<Client>(c => c.Id == id);
+        
         if (result is null)
         {
             logger.LogWarning("Client not found for id: {Id}", id);
             throw new ClientNotFoundException("Client doesn't exists");
         }
+        
         logger.LogInformation("Client retrieved for id: {Id}", id);
-        return (ClientDto)result;
+        
+        return result;
     }
 }

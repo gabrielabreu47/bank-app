@@ -18,7 +18,7 @@ public class ClientController(IClientHandler handler, ILogger<ClientController> 
     {
         try
         {
-            var result = await handler.Get(filter);
+            var result = await handler.GetAll(filter);
             var response = Response<Paged<ClientDto>>.CreateSuccessful(result);
             logger.LogInformation("Clients retrieved with filter");
             return Ok(response);

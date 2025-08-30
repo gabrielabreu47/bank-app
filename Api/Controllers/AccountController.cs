@@ -11,6 +11,26 @@ namespace Api.Controllers;
 public class AccountController(IAccountHandler handler, ILogger<AccountController> logger) : ControllerBase
 {
     /// <summary>
+    /// Gets all accounts with optional filtering.
+    /// </summary>
+    [HttpGet]
+    public async Task<IActionResult> GetAll([FromQuery] Filter filter)
+    {
+        try
+        {
+            var result = await handler.Get(filter);
+            var response = Response<Paged<AccountDto>>.CreateSuccessful(result);
+            logger.LogInformation("Clients retrieved with filter");
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error retrieving clients");
+            return StatusCode(500, Response<string>.CreateFailed("Internal server error"));
+        }
+    }
+    
+    /// <summary>
     /// Gets an account by its ID.
     /// </summary>
     [HttpGet("{id}")]
@@ -39,7 +59,7 @@ public class AccountController(IAccountHandler handler, ILogger<AccountControlle
     /// Gets all accounts for a client.
     /// </summary>
     [HttpGet("client/{id}")]
-    public async Task<IActionResult> GetAll(string id, [FromQuery] Filter filter)
+    public async Task<IActionResult> GetClientAccounts(string id, [FromQuery] Filter filter)
     {
         try
         {

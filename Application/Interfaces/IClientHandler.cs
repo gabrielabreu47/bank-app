@@ -7,6 +7,6 @@ namespace Application.Interfaces;
 
 public interface IClientHandler : IBaseHandler<Client, CreateClientDto>
 {
-    Task<Paged<ClientDto>> Get(Filter filter);
+    Task<Paged<ClientDto>> GetAll(Filter filter);
     Task<ClientDto> Get(string id);
 }

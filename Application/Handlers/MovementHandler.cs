@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using Application.Dtos.Movement;
 using Application.Interfaces;
 using AutoMapper;
@@ -31,26 +30,41 @@ public class MovementHandler(IRepository repository, IMapper mapper,
     /// </summary>
     public async Task<Paged<MovementDto>> Get(string accountId, Filter filter)
     {
-        var includes = new List<Expression<Func<Movement, object>>> { m => m.Account };
+        var query = _repository.AsQueryable<Movement>()
+            .Where(m => m.AccountId == accountId);
         
-        var filtered = await _repository
-            .ProjectToWithIncludesAsync<Movement, MovementDto>(includes, m => m.AccountId == accountId);
-       
         if (filter.Filters is not null)
         {
-            filtered = filtered.AsQueryable().Filter(filter.Filters).ToList();
+            query = query.Filter(filter.Filters);
         }
         
-        var ordered = filtered.OrderBy(m => m.Date).ToList();
+        var ordered = query.OrderBy(m => m.Date);
         
-        var count = ordered.Count;
+        var count = await _repository.CountAsync(ordered);
         
         var (skip, take) = Paged<MovementDto>.GetPagination(filter.PageNumber, filter.PageSize);
         
-        var paged = ordered.Skip(skip).Take(take).ToList();
+        var pagedQuery = ordered
+            .Skip(skip)
+            .Take(take);
         
-        return Paged<MovementDto>.Create(paged, count, filter.PageNumber, filter.PageSize);
+        var movements = await _repository
+            .ExecuteQuery(pagedQuery);
+
+        var result = movements
+            .Select(m => new MovementDto
+            {
+                Id = m.Id,
+                Date = m.Date,
+                Type = (MovementTypes?)m.Type,
+                Value = m.Value,
+                Balance = m.PreviousBalance
+            }).ToList();
+        
+        return Paged<MovementDto>
+            .Create(result, count, filter.PageNumber, filter.PageSize);
     }
+    
     /// <summary>
     /// Creates a new movement for an account.
     /// Throws AccountNotFoundException, InsufficientFundsException, or DailyLimitExceededException on error.

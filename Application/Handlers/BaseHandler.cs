@@ -1,3 +1,5 @@
+using Application.Extensions;
+using Application.Helpers;
 using Application.Interfaces;
 using AutoMapper;
 using ClientDirectory.Domain.Common;
@@ -12,6 +14,36 @@ namespace Application.Handlers;
 public class BaseHandler<T, TDto>(IRepository repository, IMapper mapper, ILogger<BaseHandler<T, TDto>> logger) 
     : IBaseHandler<T, TDto> where T : BaseEntity where TDto : class
 {
+    
+    /// <summary>
+    /// Gets a paged list of entities projected to DTOs, applying filters and pagination with mapping at query level.
+    /// </summary>
+    public async Task<Paged<TDto>> Get(Filter filter)
+    {
+        var query = repository.AsQueryable<T>();
+        
+        if (filter.Filters is not null)
+        {
+            query = query.Filter(filter.Filters);
+        }
+        
+        var count = await repository.CountAsync(query);
+        
+        var (skip, take) = Paged<TDto>
+            .GetPagination(filter.PageNumber, filter.PageSize);
+        
+        var pagedQuery = query
+            .Skip(skip)
+            .Take(take);
+        
+        var result = await repository
+            .ExecuteQuery(pagedQuery);
+
+        var mapping = mapper.Map<List<TDto>>(result);
+        
+        return Paged<TDto>.Create(mapping, count, filter.PageNumber, filter.PageSize);
+    }
+    
     /// <summary>
     /// Creates a new entity from the given DTO.
     /// </summary>
